@@ -1,0 +1,17 @@
+What is an Atom in React (Recoil)?
+  In Recoil, an atom is a piece of state that can be shared across multiple components.
+  Think of it as a central data store for a specific value.
+  Any component that reads from it will re-render automatically when its value changes.
+  It’s like useState but global instead of local to one component.
+
+
+
+//Imports the atom function from Recoil so we can create a new piece of global state
+import { atom } from "recoil";
+
+const authScreenAtom = atom({
+    key: 'authScreenAtom',
+    default: 'login',
+})
+
+export default authScreenAtom;
