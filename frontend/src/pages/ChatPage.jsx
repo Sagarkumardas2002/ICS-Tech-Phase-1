@@ -1,3 +1,11 @@
+
+// Imports Chakra UI components and hooks:
+// Box, Flex → layout containers
+// Button, Input → UI elements
+// Skeleton, SkeletonCircle → loading placeholders
+// Text → text display
+// useColorModeValue → switches colors based on light/dark mode.
+
 import { SearchIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -9,6 +17,15 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+
+
+
+// MessageContainer → UI for showing messages.
+// useShowToast → custom hook for toast notifications.
+// React hooks: useEffect for side effects, useState for local state.
+// Recoil hooks:
+  // useRecoilState → read & write atom state
+  // useRecoilValue → read atom state.
 import MessageContainer from "../components/MessageContainer";
 import useShowToast from "../hooks/useShowToast";
 import { useEffect, useState } from "react";
@@ -22,11 +39,19 @@ import { GiConversation } from "react-icons/gi";
 import userAtom from "../atoms/userAtom";
 import { useSocket } from "../context/SocketContext";
 
+
+
 const ChatPage = () => {
   const bg = useColorModeValue("gray.600", "gray.500");
   const color = useColorModeValue("white", "black");
   const hoverBg = useColorModeValue("gray.400", "gray.700");
   const hoverColor = useColorModeValue("black", "white");
+
+
+// conversationsAtom → list of all chat conversations.
+// selectedConversationAtom → the conversation currently opened.
+// searchingUser → shows loading while searching.
+// searchText → stores search input.
 
   const [searchingUser, setSearchingUser] = useState(false);
   const [loadingConversations, setLoadingConversations] = useState(true);
@@ -38,6 +63,11 @@ const ChatPage = () => {
   const currentUser = useRecoilValue(userAtom);
   const showToast = useShowToast();
   const { socket, onlineUsers } = useSocket();
+
+
+// First useEffect → messagesSeen listener
+// Listens for "messagesSeen" event from server.
+// Finds the matching conversation and marks its lastMessage.seen = true.
 
 useEffect(() => {
   socket?.on("messagesSeen", ({ conversationId }) => {
@@ -59,7 +89,13 @@ useEffect(() => {
   });
 }, [socket, setConversations]);
 
-  useEffect(() => {
+
+
+// Calls API to get all user conversations.
+// Updates conversations state.
+// Turns off loading indicator.
+
+useEffect(() => {
     const getConversations = async () => {
       try {
         const res = await fetch("/api/messages/conversations");
@@ -115,6 +151,13 @@ useEffect(() => {
         return;
       }
 
+
+// Prevents page refresh.
+// Finds a user by username.
+// Blocks messaging yourself.
+// If conversation exists → select it.
+// If not → create a temporary mock conversation. 
+   
       const mockConversation = {
         mock: true,
         lastMessage: {
@@ -137,6 +180,21 @@ useEffect(() => {
       setSearchingUser(false);
     }
   };
+
+
+
+
+// 9. JSX Layout
+// Outer <Box> → centers chat layout.
+// Left Sidebar (<Flex flex={30}>):
+// Search form → input + button.
+// If loading → show skeleton list.
+// Else → map conversations and render <Conversation> components, passing online status.
+
+// Right Panel:
+  // If no conversation selected → show placeholder icon & text.
+  // If selected → render <MessageContainer>.
+
 
   return (
     <Box
