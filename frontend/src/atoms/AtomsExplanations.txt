@@ -6,12 +6,83 @@ What is an Atom in React (Recoil)?
 
 
 
+**************************File 1 — authScreenAtom.js*************************************
 //Imports the atom function from Recoil so we can create a new piece of global state
 import { atom } from "recoil";
 
-const authScreenAtom = atom({
-    key: 'authScreenAtom',
-    default: 'login',
-})
 
-export default authScreenAtom;
+//atom({...}) → Creates a new atom.
+//key: 'authScreenAtom' → A unique ID for this atom (must be unique in your whole app).
+//default: 'login' → Initial value for the atom (by default, the auth screen will show 'login').
+
+  const authScreenAtom = atom({
+      key: 'authScreenAtom',
+      default: 'login',
+  })
+
+export default authScreenAtom;  //Exports this atom so other files can import and use it.
+
+
+
+
+
+
+**************************File 2 — messagesAtoms.js*************************************
+//Creates and exports an atom for all conversations.
+//key is "conversationsAtom" (unique identifier).
+//default is an empty array (no conversations initially).
+
+    export const conversationsAtom = atom({
+      key: "conversationsAtom",
+      default: [],
+    });
+
+
+//Creates and exports another atom for the currently selected conversation.
+//Default value is an empty conversation object with keys _id, userId, username, and userProfilePic.
+      
+  export const selectedConversationAtom = atom({
+        key: "selectedConversationAtom",
+        default: {
+          _id: "",
+          userId: "",
+          username: "",
+          userProfilePic: "",
+        },
+      });
+
+
+
+
+
+
+**************************File 3 — postsAtom.js*************************************
+//Creates an atom to store posts data.
+//key is "postsAtom", default is [] (empty array — no posts initially).
+    
+    import { atom } from "recoil"
+    const postsAtom = atom({
+        key: "postsAtom",
+        default: [],
+    });
+    export default postsAtom;  //Without exporting it, that atom would be stuck in its file and nobody else could access it.
+
+
+
+
+
+
+**************************File 4 — userAtom.js*************************************
+//Creates an atom for user data.
+//key is "username".
+//default value is fetched from localStorage:
+//localStorage.getItem('user-threads') → Gets stored user data (string).
+//JSON.parse(...) → Converts that string into a JS object.
+//If nothing is in localStorage, default will be null.
+
+    import { atom } from "recoil";
+    const userAtom = atom({
+        key: 'username',
+        default: JSON.parse(localStorage.getItem('user-threads'))
+    })
+
